@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: receiver
+  labels:
+    app: receiver
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: receiver
+  template:
+    metadata:
+      labels:
+        app: receiver
+    spec:
+      containers:
+      - name: receiver
+        image: 4rman/alibaba:latest
+        imagePullPolicy: IfNotPresent
+        env:
+          - name: RABBITMQ_QUEUE
+            value: "ticket-queue"
+          - name: RABBITMQ_HOST
+            value: "rabbitmq"
+        command: ["python3", "receiver.py"]
